@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys, argparse
+import os, sys, argparse, shlex
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pathlib import Path
 import wtpack
@@ -28,3 +28,6 @@ dur = len(L) / wtpack.SAMPLE_RATE
 print(f"files={len(files)} payload={total}B stored={stored}B ({ratio:.1%})")
 print(f"duration={dur:.1f}s ({dur/60:.1f} min)")
 print(f"-> {a.dst}")
+print()
+print("播放命令 (复制即用):")
+print(f"afplay -v 0.5 {shlex.quote(a.dst)}")
