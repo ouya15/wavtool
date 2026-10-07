@@ -1,0 +1,9 @@
+{
+  "name": "wavtool",
+  "version": "2.0.0",
+  "description": "Pack directories into WAV audio files.",
+  "bin": { "wavtool": "bin/wavtool.js" },
+  "files": ["bin/", "python/", "install.sh", "uninstall.sh", "LICENSE"],
+  "engines": { "node": ">=16" },
+  "license": "MIT"
+}
