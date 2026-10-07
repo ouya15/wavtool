@@ -10,15 +10,17 @@ const WV_HOME = path.join(os.homedir(), '.wavtool');
 const VENV = path.join(WV_HOME, 'venv');
 const VENV_PY = path.join(VENV, 'bin', 'python3');
 const DEPS_MARKER = path.join(WV_HOME, 'deps-v3');
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 
 const HELP = `wavtool ${VERSION} - pack directories into WAV audio files
 
 Usage:
-  wavtool pack <dir> <out.wav>        Pack a directory into a WAV file
+  wavtool pack <dir> <out.wav>          Pack a directory into a WAV file
+  wavtool pack <dir> <out.wav> --ultra  Higher-throughput format (96 kHz)
+  wavtool rate [96000]                  Show or set the output device sample rate
   wavtool --version | --help
 
-Options:
+Options (pack):
   --no-compress     disable in-memory compression
   --padding <sec>   leading silence in seconds (default 10)
 
@@ -59,10 +61,10 @@ const argv = process.argv.slice(2);
 const cmd = argv[0];
 if (!cmd || cmd === 'help' || cmd === '--help' || cmd === '-h') { console.log(HELP); process.exit(cmd ? 0 : 2); }
 if (cmd === '--version' || cmd === '-v') { console.log(VERSION); process.exit(0); }
-if (cmd === 'pack') {
-  if (argv.length < 3) { console.log(HELP); process.exit(2); }
+if (cmd === 'pack' || cmd === 'rate') {
+  if (cmd === 'pack' && argv.length < 3) { console.log(HELP); process.exit(2); }
   ensureEnv();
-  const r = spawnSync(VENV_PY, [path.join(PY_DIR, 'tx_pack.py')].concat(argv.slice(1)), { stdio: 'inherit' });
+  const r = spawnSync(VENV_PY, [path.join(PY_DIR, 'dispatch.py')].concat(argv), { stdio: 'inherit' });
   process.exit(r.status === null ? 1 : r.status);
 }
 console.error('unknown command: ' + cmd);
