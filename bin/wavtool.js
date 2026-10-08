@@ -10,7 +10,7 @@ const WV_HOME = path.join(os.homedir(), '.wavtool');
 const VENV = path.join(WV_HOME, 'venv');
 const VENV_PY = path.join(VENV, 'bin', 'python3');
 const DEPS_MARKER = path.join(WV_HOME, 'deps-v3');
-const VERSION = '2.1.0';
+const VERSION = '2.2.0';
 
 const HELP = `wavtool ${VERSION} - pack directories into WAV audio files
 

@@ -147,3 +147,28 @@ def save_wav_stereo(L: np.ndarray, R: np.ndarray, filename: str) -> None:
         inter = np.empty(len(L) * 2, dtype=np.int16)
         inter[0::2] = L; inter[1::2] = R
         w.writeframes(inter.tobytes())
+
+def encode_repair_v21(root_dir: str, block_indices, head_padding_seconds: float = 3.0,
+                      compress: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+
+    root = Path(root_dir).resolve()
+    files = sorted([f for f in root.rglob("*") if f.is_file()])
+    raw_stream = b"".join(f.read_bytes() for f in files)
+    if compress and raw_stream:
+        segs = [raw_stream[i:i + SEG_RAW] for i in range(0, len(raw_stream), SEG_RAW)]
+        stored = b"".join(_compress_chunk(s) for s in segs)
+    else:
+        stored = raw_stream
+    n_data = max(1, (len(stored) + CHUNK - 1) // CHUNK)
+    blocks = []
+    for bi in sorted(set(int(i) for i in block_indices)):
+        if 0 <= bi < n_data:
+            blocks.append(build_block(b"DATA", bi, n_data, stored[bi * CHUNK:(bi + 1) * CHUNK]))
+        else:
+            print(f"[repair] block {bi} out of range (0..{n_data - 1}), skipped")
+    if not blocks:
+        raise SystemExit("[repair] no valid blocks in the list")
+    left = np.concatenate(blocks)
+    right = np.zeros(len(left), dtype=np.int16)
+    pad = np.zeros(int(head_padding_seconds * SAMPLE_RATE), dtype=np.int16)
+    return np.concatenate([pad, left]), np.concatenate([pad, right])

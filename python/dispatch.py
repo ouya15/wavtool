@@ -16,7 +16,7 @@ def main():
         return 2
     cmd, rest = args[0], args[1:]
     if cmd == 'pack':
-        ultra = '--ultra' in rest
+        ultra = ('--ultra' in rest) or ('--repair' in rest)
         rest = [a for a in rest if a != '--ultra']
         return run('tx_pack21.py' if ultra else 'tx_pack.py', rest)
     if cmd == 'rate':
