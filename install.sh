@@ -24,9 +24,9 @@ cat > "$BIN_DIR/wavtool" <<EOF
 #!/usr/bin/env bash
 PY="$WV_HOME/venv/bin/python3"
 case "\${1:-}" in
-  pack|rate) C="\$1"; shift; exec "\$PY" "$DIR/python/dispatch.py" "\$C" "\$@" ;;
-  --version|-v) echo "wavtool 2.2.0"; ;;
-  *) echo "usage: wavtool pack <dir> <out.wav> [--ultra] | wavtool rate [96000]"; exit 2 ;;
+  pack|rate|vol) C="\$1"; shift; exec "\$PY" "$DIR/python/dispatch.py" "\$C" "\$@" ;;
+  --version|-v) echo "wavtool 2.3.0"; ;;
+  *) echo "usage: wavtool pack <dir> <out.wav> [--ultra] | wavtool rate [96000] | wavtool vol [38]"; exit 2 ;;
 esac
 EOF
 chmod +x "$BIN_DIR/wavtool"

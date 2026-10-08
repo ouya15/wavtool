@@ -2,7 +2,7 @@
 import sys, os, subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-USAGE = "usage: wavtool pack <dir> <out.wav> [--ultra] | wavtool rate [96000]"
+USAGE = "usage: wavtool pack <dir> <out.wav> [--ultra] | wavtool rate [96000] | wavtool vol [38]"
 
 
 def run(script, args):
@@ -21,6 +21,8 @@ def main():
         return run('tx_pack21.py' if ultra else 'tx_pack.py', rest)
     if cmd == 'rate':
         return run('audiorate.py', rest)
+    if cmd == 'vol':
+        return run('audiovol.py', rest)
     print(USAGE)
     return 2
 
